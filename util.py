@@ -15,6 +15,7 @@ def load_data(path=str, threshold=float):
     logger.info(data.shape)
 
     # shuffle data
+    np.random.seed(42)
     np.random.shuffle(data)
     
     # extract X, y
