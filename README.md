@@ -1,4 +1,4 @@
-# Comparision of learners' profermance on semeion handwritten digit
+# Comparison of learners' profermance on semeion handwritten digit
 ## Lab notebook
 Dec 9, 2019 -- Fiona:
 
