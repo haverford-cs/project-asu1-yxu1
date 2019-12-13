@@ -32,6 +32,19 @@ def load_data(path=str, threshold=float):
     
     return train_X, train_y, val_X, val_y
 
+def draw_wrong_img(X, y, y_hat, filename):
+    """
+    Regenerate the images when their labels are predicted wrong.
+    """
+    i = 1
+    for input_, prediction, label in zip(X, y_hat, y):
+        if prediction != label:
+            name = './img/{f}/{f}'.format(f=filename) + str(i)
+            plt.imshow(input_.reshape(16,16), cmap="gray_r")
+            plt.title('{}: True label: {}. Prediction: {}'.format(filename.upper(), label, prediction))
+            plt.savefig('{}.png'.format(name))
+            i+=1
+
 def main():
     train_X, train_y, val_X, val_y = load_data('./data/semeion.data', 0.8)
     
@@ -40,8 +53,8 @@ def main():
     logger.info(x)
     logger.info(train_y[i])
    
-    plt.imshow(x, cmap='gray')
-    # plt.savefig('test.png')
+    plt.imshow(x, cmap="gray_r")
+    plt.savefig('test.png')
     plt.show()
 
 if __name__ == '__main__':

@@ -35,13 +35,16 @@ def train(learner, train_X, train_y, val_X, val_y):
     return learner.score(train_X, train_y), learner.score(val_X, val_y)
 
 
-def main(validation):
+            
+
+
+def main(plot):
     train_X, train_y, val_X, val_y = util.load_data('./data/semeion.data', 0.8)
     
     # data = dict(t_X=train_X, t_y=train_y, v_X=val_X, v_y=val_y)
     
     # KNN
-    if validation:
+    if plot:
         # find the best hyper-parameters
         # initialize lists for plotting graph
         uni_train_accur, uni_test_accur, dist_train_accur, dist_test_accur = ([] for _ in range(4))
@@ -78,15 +81,11 @@ def main(validation):
     print('Confusion matrix:\n', confusion_matrix(val_y, y_pred))
     
     # find the wrong predictions
-    '''
-    for input_, prediction, label in zip(val_X, y_pred, val_y):
-        if prediction != label:
-            print(input_.reshape(16,16), 'has been classified as ', prediction, \
-                'and should be ', label)
-    '''
+    # if plot:
+    util.draw_wrong_img(val_X, val_y, y_pred, 'knn')
 
     # SVM
-    if validation:
+    if plot:
         # find the best hyper-parameters
         # initialize lists for plotting graph
         train1, test1, train2, test2, train3, test3 = ([] for _ in range(6))
@@ -125,6 +124,10 @@ def main(validation):
     print('------SVM------')
     print('Testing accuracy: ', svm_clf.score(val_X, val_y))
     print('Confusion matrix:\n', confusion_matrix(val_y, y_pred))
+    
+    # find the wrong predictions
+    if plot:
+        util.draw_wrong_img(val_X, val_y, y_pred, 'svm')
         
 if __name__ == '__main__':
     main(False)
