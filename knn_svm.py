@@ -4,9 +4,9 @@ from sklearn.metrics import confusion_matrix
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 
+import glob
 import matplotlib.pyplot as plt
 import numpy as np
-import json
 
 # from my own libraries
 import util
@@ -81,8 +81,13 @@ def main(plot):
     print('Confusion matrix:\n', confusion_matrix(val_y, y_pred))
     
     # find the wrong predictions
-    # if plot:
-    util.draw_wrong_img(val_X, val_y, y_pred, 'knn')
+    if plot:
+        util.draw_wrong_img(val_X, val_y, y_pred, 'knn')
+        
+    
+    X = util.test_self_data()
+    y_pred = knn_clf.predict(X)
+    print(y_pred)
 
     # SVM
     if plot:
@@ -128,6 +133,10 @@ def main(plot):
     # find the wrong predictions
     if plot:
         util.draw_wrong_img(val_X, val_y, y_pred, 'svm')
+        
+    X = util.test_self_data()
+    y_pred = svm_clf.predict(X)
+    print(y_pred)
         
 if __name__ == '__main__':
     main(False)
