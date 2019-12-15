@@ -1,5 +1,10 @@
 # Comparison of learners' profermance on semeion handwritten digit
 ## Lab notebook
+
+Dec 14, 2019 -- Amberley
+1. Put our daraset in CNN model, see how well it performs.
+2. Get test data ready, create a csv file to store test dataset.
+
 Dec 9, 2019 -- Fiona:
 
 1. Set up a random seed (42) for numpy shuffle in util in order to generate reproducable 
