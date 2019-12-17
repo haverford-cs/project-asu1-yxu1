@@ -101,13 +101,14 @@ def run_training(model, train_dset, val_dset, epoches):
 
     return train_ac, val_ac
 
-def predictions(model, test_dset):
+def predictions(model, test_dset, test, filename=''):
     """
     building confusion matrix
     """
     cm = np.zeros((10,10), dtype=int)
     score = 0
     length = 0
+    n = 0
     for images, labels in test_dset:
         predictions = model(images)
         # print(predictions)
@@ -117,17 +118,29 @@ def predictions(model, test_dset):
             y = labels[i]
             cm[y][y_]+=1
 
-            if y != y_:
+            if int(y) != int(y_):
                 score += 1
-    print('Test accuracy: ', (length -score)/length)
+                if test:
+                    input_ = np.array(images[i])
+                    name = './img/{f}/{f}'.format(f=filename) + str(n)
+                    plt.imshow(input_.reshape(16,16), cmap="gray_r")
+                    plt.title('CNN: True label: {}. Prediction: {}'.format(y, y_))
+                    plt.savefig('{}.png'.format(name))
+                    n+=1
+
+    print('Test accuracy: ', (length - score)/length)
 
     print(cm)
 
 def main(plot):
     # Invoke the above function to get our data.
     train_X, train_y, val_X, val_y = util.load_data('./data/semeion.data', 0.8)
+    my_X, my_y = util.get_my_data('./data/testset.csv', './data/digits/')
+    my_X = my_X.astype('float')
+    print(my_X.dtype)
     train_X = reshape_data(train_X, 16)
     val_X = reshape_data(val_X, 16)
+    my_X = reshape_data(my_X, 16)
     print('Train data shape: ', train_X.shape)              # (49000, 32, 32, 3)
     print('Train labels shape: ', train_y.shape)            # (49000,)
     print('Validation data shape: ', val_X.shape)           # (1000, 32, 32, 3)
@@ -139,6 +152,7 @@ def main(plot):
     # train should be shuffled, but not validation and testing datasets
     train_dset = tf.data.Dataset.from_tensor_slices((train_X, train_y)).batch(64)
     val_dset = tf.data.Dataset.from_tensor_slices((val_X, val_y)).batch(64)
+    my_dset = tf.data.Dataset.from_tensor_slices((my_X, my_y)).batch(64)
 
 
     # uncomment the following if you want to check the shape of images and labels
@@ -166,10 +180,10 @@ def main(plot):
 
     else:
         cnn_model_new = CNNmodel()
-        E = 6
+        E = 15
         train_accuracy, val_accuracy = run_training(cnn_model_new, train_dset, val_dset, E)
 
-        epoches = np.arange(1,7)
+        epoches = np.arange(1,E+1)
         plt.plot(epoches, train_accuracy, epoches, val_accuracy)
         plt.xlabel('training iteration')
         plt.ylabel('accuracy')
@@ -179,7 +193,9 @@ def main(plot):
         plt.show()
 
         print("E = 6")
-        predictions(cnn_model_new, val_dset)
+        predictions(cnn_model_new, val_dset, False)
+        print('test our own data')
+        predictions(cnn_model_new, my_dset, True, 'cnn_own')
 
 # please choose either 'cnn' or 'fc' as the input of main function
 #main('fc')
