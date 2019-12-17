@@ -34,12 +34,15 @@ def train(learner, train_X, train_y, val_X, val_y):
     learner.fit(train_X, train_y)
     return learner.score(train_X, train_y), learner.score(val_X, val_y)
 
-
+def test(learner, train_X, train_y, val_X, val_y):
+    learner.fit(train_X, train_y)
+    y_pred = learner.predict(val_X)
+    print('Testing accuracy: ', learner.score(val_X, val_y))
+    print('Confusion matrix:\n', confusion_matrix(val_y, y_pred))
             
-
-
 def main(plot):
     train_X, train_y, val_X, val_y = util.load_data('./data/semeion.data', 0.8)
+    my_X, my_y = util.get_my_data('./data/testset.csv', './data/digits/')
     
     # data = dict(t_X=train_X, t_y=train_y, v_X=val_X, v_y=val_y)
     
@@ -73,25 +76,22 @@ def main(plot):
         plt.show()
   
     # set weights as distance, and n_neighbors as 5
-    knn_clf = KNeighborsClassifier(5, weights='distance')
-    knn_clf.fit(train_X, train_y)
-    y_pred = knn_clf.predict(val_X)
     print('------KNN------')
-    print('Testing accuracy: ', knn_clf.score(val_X, val_y))
-    print('Confusion matrix:\n', confusion_matrix(val_y, y_pred))
+    knn_clf = KNeighborsClassifier(5, weights='distance')
+    test(knn_clf, train_X, train_y, val_X, val_y)
+
     
     # find the wrong predictions
     if plot:
         util.draw_wrong_img(val_X, val_y, y_pred, 'knn')
-        
     
-    my_X, my_y = util.get_my_data('./data/testset.csv', './data/digits/')
     my_y_pred = knn_clf.predict(my_X)
-    print(my_y.shape)
-    print(my_y_pred.shape)
     print('Testing accuracy of our own data: ', knn_clf.score(my_X, my_y))
     print('Confusion matrix of our own data:\n', confusion_matrix(my_y, my_y_pred))
 
+    if plot:
+    util.draw_wrong_img(my_X, my_y, my_y_pred, 'knn_own')
+    
     # SVM
     if plot:
         # find the best hyper-parameters
@@ -126,22 +126,20 @@ def main(plot):
         plt.show()
   
     # set C as 100, and gamma as 0.01
-    svm_clf = SVC(C=100, gamma=0.01)
-    svm_clf.fit(train_X, train_y)
-    y_pred = svm_clf.predict(val_X)
     print('------SVM------')
-    print('Testing accuracy: ', svm_clf.score(val_X, val_y))
-    print('Confusion matrix:\n', confusion_matrix(val_y, y_pred))
+    svm_clf = SVC(C=100, gamma=0.01)
+    test(svm_clf, train_X, train_y, val_X, val_y)
     
     # find the wrong predictions
     if plot:
         util.draw_wrong_img(val_X, val_y, y_pred, 'svm')
     
-       
-    my_X, my_y = util.get_my_data('./data/testset.csv', './data/digits/')
     my_y_pred = svm_clf.predict(my_X)
     print('Testing accuracy of our own data: ', svm_clf.score(my_X, my_y))
     print('Confusion matrix of our own data:\n', confusion_matrix(my_y, my_y_pred))
+    
+    # if plot:
+    util.draw_wrong_img(my_X, my_y, my_y_pred, 'svm_own')
         
 if __name__ == '__main__':
     main(False)
