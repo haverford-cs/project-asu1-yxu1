@@ -85,9 +85,12 @@ def main(plot):
         util.draw_wrong_img(val_X, val_y, y_pred, 'knn')
         
     
-    X = util.test_self_data()
-    y_pred = knn_clf.predict(X)
-    print(y_pred)
+    my_X, my_y = util.get_my_data('./data/testset.csv', './data/digits/')
+    my_y_pred = knn_clf.predict(my_X)
+    print(my_y.shape)
+    print(my_y_pred.shape)
+    print('Testing accuracy of our own data: ', knn_clf.score(my_X, my_y))
+    print('Confusion matrix of our own data:\n', confusion_matrix(my_y, my_y_pred))
 
     # SVM
     if plot:
@@ -133,10 +136,12 @@ def main(plot):
     # find the wrong predictions
     if plot:
         util.draw_wrong_img(val_X, val_y, y_pred, 'svm')
-        
-    X = util.test_self_data()
-    y_pred = svm_clf.predict(X)
-    print(y_pred)
+    
+       
+    my_X, my_y = util.get_my_data('./data/testset.csv', './data/digits/')
+    my_y_pred = svm_clf.predict(my_X)
+    print('Testing accuracy of our own data: ', svm_clf.score(my_X, my_y))
+    print('Confusion matrix of our own data:\n', confusion_matrix(my_y, my_y_pred))
         
 if __name__ == '__main__':
     main(False)

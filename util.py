@@ -1,5 +1,6 @@
 """
 """
+import csv
 import cv2
 import glob
 import matplotlib.pyplot as plt
@@ -45,20 +46,27 @@ def process_image(img):
     img[img==255]=0
     return img.reshape((256,))
 
-def test_self_data():
-    f = []
-    
-    for file_ in glob.glob('./data/self_data/*.png'): 
-        f.append(file_)
-        
-    print(f)
-    
+def transform_image(imgs):   
     X = []
-    for img in f:
+    for img in imgs:
         X.append(process_image(img))
-        print(process_image(img).reshape(16,16))
     return np.array(X)
+
+def read_csv(path, img_path):
+    with open(path, encoding='utf-8-sig') as file:
+        readCSV = csv.reader(file, delimiter=',')
+        imgs = []
+        label = []
+        for row in readCSV:
+            imgs.append(img_path+row[0]+'.png')
+            label.append(float(row[1]))
+        label = np.array(label)
+        return imgs, label
     
+def get_my_data(path, img_path):
+    imgs, label = read_csv(path, img_path)
+    features = transform_image(imgs)
+    return features, label
     
 def main():
     train_X, train_y, val_X, val_y = load_data('./data/semeion.data', 0.8)
@@ -72,8 +80,11 @@ def main():
     # plt.savefig('test.png')
     # plt.show()
     
-    test_self_data(train_X)    
- 
+    imgs, label = read_csv('./data/testset.csv', './data/digits/')
+    transform_image(imgs)  
+    
+      
+    
 
 if __name__ == '__main__':
     main()
