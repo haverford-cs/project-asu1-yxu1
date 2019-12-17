@@ -42,8 +42,8 @@ def draw_wrong_img(X, y, y_hat, filename):
 def process_image(img):
     img = cv2.imread(img, cv2.IMREAD_GRAYSCALE)
     img = cv2.resize(img, (16,16))
-    img[img<255]=1
-    img[img==255]=0
+    img[img<=200]=1
+    img[img>200]=0
     return img.reshape((256,))
 
 def transform_image(imgs):   
@@ -81,7 +81,8 @@ def main():
     # plt.show()
     
     imgs, label = read_csv('./data/testset.csv', './data/digits/')
-    transform_image(imgs)  
+    imgs = transform_image(imgs)  
+    print(imgs)
     
       
     
