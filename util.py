@@ -6,6 +6,7 @@ import glob
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import numpy as np 
+import seaborn as sns
 
 
 def load_data(path=str, threshold=float):
@@ -13,7 +14,7 @@ def load_data(path=str, threshold=float):
     data = np.loadtxt(path)
 
     # shuffle data
-    np.random.seed(42)
+    # np.random.seed(42)
     np.random.shuffle(data)
     
     # extract X, y
@@ -42,8 +43,8 @@ def draw_wrong_img(X, y, y_hat, filename):
 def process_image(img):
     img = cv2.imread(img, cv2.IMREAD_GRAYSCALE)
     img = cv2.resize(img, (16,16))
-    img[img<=200]=1
-    img[img>200]=0
+    img[img<=230]=1
+    img[img>230]=0
     return img.reshape((256,))
 
 def transform_image(imgs):   
@@ -67,6 +68,12 @@ def get_my_data(path, img_path):
     imgs, label = read_csv(path, img_path)
     features = transform_image(imgs)
     return features, label
+
+
+def draw_heatmap(array, filename):
+    ax = sns.heatmap(array, linewidth=0.2, annot=True, cmap="YlGnBu")
+    plt.savefig(filename)
+    plt.show()
     
 def main():
     train_X, train_y, val_X, val_y = load_data('./data/semeion.data', 0.8)
