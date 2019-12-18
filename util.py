@@ -14,7 +14,7 @@ def load_data(path=str, threshold=float):
     data = np.loadtxt(path)
 
     # shuffle data
-    # np.random.seed(42)
+    np.random.seed(42)
     np.random.shuffle(data)
     
     # extract X, y
