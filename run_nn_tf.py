@@ -197,8 +197,6 @@ def main(plot):
         predictions(cnn_model_new, val_dset, False)
         print('test our own data')
         predictions(cnn_model_new, my_dset, False, 'cnn_own')
-        util.draw_heatmap(cnn_model_new, './img/cnn_cm.png')
-
 
 # please choose either 'cnn' or 'fc' as the input of main function
 #main('fc')
