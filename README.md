@@ -1,6 +1,12 @@
 # Comparison of learners' profermance on semeion handwritten digit
 This project is to study the prefermance of different learners (KNN, SVM, and CNN) on predicting
 handwritten digits.
+
+## Data reference
+Semeion Research Center of Sciences of Communication, via Sersale 117, 
+00128 Rome, Italy
+Tattile Via Gaetano Donizetti, 1-3-5,25030 Mairano (Brescia), Italy. 
+
 ## Lab notebook
 
 Dec 18, 2019 -- Amberley & Fiona
